@@ -1,0 +1,30 @@
+{
+  "name": "webpack-",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/webpack --config webpack.config.js",
+    "dev":"./node_modules/.bin/webpack-dev-server --watch --hot --devtool source-map"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WYoYao/webpack-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WYoYao/webpack-/issues"
+  },
+  "homepage": "https://github.com/WYoYao/webpack-#readme",
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "mini-css-extract-plugin": "^0.4.1",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.16.5",
+    "webpack-dev-server": "^3.1.5"
+  }
+}
