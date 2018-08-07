@@ -1,5 +1,5 @@
 require('./index.css');
 require('./index2.css');
-const show=require('./show.js');
+const show = require('./show.js');
 console.log('webp1112ack');
-show('webpack1');
+show('Webpack Leo');

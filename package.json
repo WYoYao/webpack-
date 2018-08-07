@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/webpack --config webpack.config.js",
-    "dev":"./node_modules/.bin/webpack-dev-server --watch --hot --devtool source-map"
+    "dev": "./node_modules/.bin/webpack-dev-server --watch --hot --devtool source-map"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "mini-css-extract-plugin": "^0.4.1",
     "style-loader": "^0.21.0",
     "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   }
 }
