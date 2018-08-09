@@ -16,7 +16,18 @@
 > 配置Webpack的方式有如下两种：
 > 1.通过一个JavaScript文件描述配置，例如使用webpack.config.js文件里的配置。
 > 2.执行Webpack可执行文件时通过命令行参数传入，例如webpack --devtool source-map。
-> 这两种方式可以相互搭配，例如执行Webpack时通过命令webpack --config webpack-dev.config扣指定配置文件，再去webpack-dev.config.js文件里描述部分配置。
+> 这两种方式可以相互搭配，例如执行Webpack时通过命令webpack --config webpack-dev.config 指定配置文件，再去webpack-dev.config.js文件里描述部分配置。
+
+> Npm Script: Npm 是安装在Node.js 时，附带的包管理器，NpmScript 是Npm 的一个内置功能，允许在package.json 文件里使用scripts 字段定义任务。
+
+```JSON
+{
+    "scripts":{
+        "dev":"webpack-dev-server --config webpack-dev.config.js",
+        "build":"webpack --config webpack.config.js"
+    }
+}
+```
 
 > 按照配置所影响的功能来划分，可分为如下内容。
 >- Entry:配置模块的入口。
@@ -415,5 +426,43 @@ npm install --save-dev babel-preset-react
 ```
 
 #### Vue
-## 97
+
 > Vue的项目能用可直接运行在浏览器环境里的代码编写，但为了方便编码，大多数项目都会采用Vue官方的单文件组件。
+> 在webpack 中接入我们的Vue 修改如下：
+
+```
+module.exports={
+    module:{
+        rules:[
+            {
+                test:/\.vue$/,
+                use:['vue-loader'],
+            }
+        ]
+    }
+}
+```
+
+> 下载需要的库
+
+```
+npm install --save vue
+npm install --save-dev vue-loader css-loader vue-template-compiler
+```
+
+> 对应的依赖如下：
+>- vue-loader : 解析和转换 .vue 文件，提取出其中的 js,css,template 代码，分别将他们交给对应Loader 去处理。
+>- css-loader : 加载有vue-loader 提取出的CSS 代码。
+>- vue-template-compilter:将vue-loader 提取出来的HTML 模板编译成对应的可执行JavaScript 代码，这和React 中的JSX 语法被编译成 JavaScript代码类似，预先编译好的HTML 模板相对于在浏览器中编译的HTML 模板，性能更好。
+
+#### 检查代码 ESlint
+
+> 在日益庞大，复杂的前端项目中，经常出现多人协同开发，这个时候代码的可读性显得极其重要。
+> 检查代码中主要的重点：
+>- 代码风格：统一代码风格，例如如何缩进，如果写注释等（保障代码的可读性）。
+>- 潜在问题：分析代码在运行过程中可能出现的潜在Bug.
+
+> **最常用的检查工具的是ESlint**,不仅内置大量检查规则，还可以通过插件的机制进行扩展。
+
+
+#### 单页应用生成HTML
