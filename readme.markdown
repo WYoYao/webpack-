@@ -464,5 +464,126 @@ npm install --save-dev vue-loader css-loader vue-template-compiler
 
 > **最常用的检查工具的是ESlint**,不仅内置大量检查规则，还可以通过插件的机制进行扩展。
 
+> **ESlint使用**
 
-#### 单页应用生成HTML
+> 可以通过 eslint-loader 可以方便的将ESLint 整合到 Webpack 中，使用方法如下：
+
+```
+module.exports={
+    module:{
+        rules:[
+            {
+                test:/\.js$/,
+                // 不用检查 node_modules 目录下的代码
+                include:/node_modules/,
+                loader:'eslint-loader',
+                // 将 eslint-loader 的执行顺序放在最前面，防止其他loader将处理后的代码交给eslint-loader 去检查
+                enforce:'pre'
+            }
+        ]
+    }
+}
+```
+
+> 接入eslint-loader 后，就能在控制台中看到ESLint输出的错误日志了。
+
+
+#### 加载图片
+
+> 在网页中需要依赖图片资源，例如png,jpg,gif。
+> 接下来讨论如何使用Webpack加载图片资源。
+
+> **file-loader**可以将 JavaScript 和 CSS 中导入图片的语句替换成正确的地址，同时将文件输出到对应的位置。
+
+> 例如，CSS源码是这样
+
+```
+#app{
+    background-image:url(./imgs/a.png);
+}
+```
+
+> 被file-loader 转换后输出的CSS会变成下面这样：
+
+```
+#app{
+    background-image:url(556el251a78c5afda9ee7dd06ad109b.png);
+}
+```
+
+> 并且在输出目录dist 中多出 ./imgs/a.png 对应的图片文件 556el251a78c5afda9ee7dd06ad109b.png,输出的文件名是根据文件的内容计算出来的hash值。
+
+> 在webpack 中加入file-loader 非常简单，相关配置如下：
+
+```
+module.exports={
+    module:{
+        rules:[
+            {
+                test:/(\.png$|\.svg$)/,
+                use:['file-loader']
+            }
+        ]
+    }
+}
+```
+
+> **url-loader**
+> url-loader 可以将文件内容经过base64编码后注入Javascript 或者CSS 中。
+
+```
+#app{
+    background-image:url(./imgs/a.png);
+}
+```
+
+> 被url-loader转换后输出的CSS会变成下面这样：
+
+```
+#app{
+    background-image:url(data:image/png;base64.aweagwhaefbzfgnrh...);
+}
+```
+
+> 但是如果图片的体积过大的时候会大致Javascript，CSS 文件过大而带来的网页加载缓慢问题。
+> 一般利用url-loader将网页需要用到的小图片资源注入代码中，以减少加载次数。
+> url-loader考虑到上面的问题，提供了一个方便的选择：limit,该选项用于控制在的文件的大小下一limit时才使用url-loader,否则使用fallback选项中配置的loader。
+
+```
+module.exports={
+    module:{
+        rules:[
+            {
+                test:/\.png$/,
+                use:[
+                    {
+                        loader:'url-loader',
+                        options:{
+                            //  30kb 以下的文件采用url-loader
+                            limit:1024*30,
+                            // 否则采用file-loader,默认值是file-loader
+                            fallback:'file-loader',
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+#### 加载Source Map
+
+> 我们在开发过程中，需要调试代码来定位问题，但是我们在调试的过程中我们会发现，所生成的代码可读性非常差,这为代码调试带来不便。
+
+> Webpack 支持转换生成的代码输出对应的Source Map文件，以方便在浏览器中的通过源码调试。
+> 控制Source Map 输出的Webpack 配置项是devtool。
+
+> devtool 的取值可以由source-map,eval,inline,hidden,cheap,module 这6个关键字随意组合而成，这6个关键字每一个都代表一种特性:含义分别如下。
+
+>- eval:用eval语句包裹需要安装的模块。
+>- source-map:生成独立的Source Map文件。
+>- hidden:不在JavasScipt 文件中指出SourceMap 文件所在，这样浏览器就不会自动加载SourceMap。
+>- inline:将生成的Source Map 转换成base64格式内嵌在JavaScript文件中。
+>- cheap:在生成的Source Map 中不会包含的列信息，这样计算量更小，输出的SourceMap 文件更小，同时Loader输出的Source Map 不会被采用。
+>- module:来自Loader 的Source Map 被简单处理成每行一个模块。

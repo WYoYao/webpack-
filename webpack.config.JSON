@@ -1,0 +1,8 @@
+{
+    "mode":"production",
+    "entry":"./src/app.js",
+    "output":{
+        "path":"./dist",
+        "filename":"bundles.js"
+    }
+}
